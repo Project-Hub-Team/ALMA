@@ -34,14 +34,28 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen bg-cover bg-center relative flex items-center justify-center p-4"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/bg.jpeg')`
-      }}
-    >
-      {/* Form Card */}
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
+    <div className="min-h-screen flex">
+      {/* Left Side - Image Background */}
+      <div 
+        className="hidden lg:block lg:w-1/2 bg-cover bg-center relative"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/bg.jpeg')`
+        }}
+      >
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-12">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full mb-6">
+            <MdEmail size={60} className="text-white" />
+          </div>
+          <h2 className="text-4xl font-bold mb-4">Reset Password</h2>
+          <p className="text-xl text-center max-w-md">
+            Don't worry, we'll help you get back into your account
+          </p>
+        </div>
+      </div>
+
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <div className="max-w-md w-full">
         {/* Back Button */}
         <Link
           to="/login"
@@ -107,6 +121,8 @@ const ForgotPassword = () => {
               </Link>
             </div>
           )}
+        </div>
+      </div>
       </div>
     </div>
   );
