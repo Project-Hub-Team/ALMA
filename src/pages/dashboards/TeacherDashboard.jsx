@@ -24,9 +24,9 @@ const TeacherDashboard = () => {
 
     try {
       const [classesResult, gradesResult, attendanceResult] = await Promise.all([
-        readAllRecords('classes'),
-        readAllRecords('grades'),
-        readAllRecords('attendance')
+        readAllRecords('classes').catch(() => ({ success: true, data: [] })),
+        readAllRecords('grades').catch(() => ({ success: true, data: [] })),
+        readAllRecords('attendance').catch(() => ({ success: true, data: [] }))
       ]);
 
       // Filter classes assigned to this teacher
@@ -65,6 +65,13 @@ const TeacherDashboard = () => {
       });
     } catch (error) {
       console.error('Error loading dashboard:', error);
+      // Set default stats on error
+      setStats({
+        myClasses: 0,
+        totalStudents: 0,
+        pendingGrades: 0,
+        attendanceRate: 0
+      });
     } finally {
       setLoading(false);
     }

@@ -6,6 +6,8 @@
   "description": "Complete PWA School Management System for Ghanaian Schools (Pre-School to JHS)",
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
+    "bcryptjs": "^3.0.3",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.0.6",
     "firebase": "^10.7.1",
     "jspdf": "^2.5.1",

@@ -22,8 +22,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Initialize a secondary app for admin operations (creating users without affecting current session)
+const secondaryApp = initializeApp(firebaseConfig, 'Secondary');
+
 // Initialize Firebase services
 export const auth = getAuth(app);
+export const secondaryAuth = getAuth(secondaryApp);
 export const database = getDatabase(app);
 export const storage = getStorage(app);
 export const analytics = getAnalytics(app);

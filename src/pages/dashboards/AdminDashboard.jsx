@@ -22,9 +22,9 @@ const AdminDashboard = () => {
       const [studentsResult, teachersResult, feesResult, classesResult, usersResult] = await Promise.all([
         getAllStudents(),
         getAllTeachers(),
-        readAllRecords('fees'),
-        readAllRecords('classes'),
-        readAllRecords('users')
+        readAllRecords('fees').catch(() => ({ success: true, data: [] })),
+        readAllRecords('classes').catch(() => ({ success: true, data: [] })),
+        readAllRecords('users').catch(() => ({ success: true, data: [] }))
       ]);
 
       // Count users by role (primary source)

@@ -164,27 +164,37 @@ export const listenToRecords = (path, callback) => {
 // ============================================
 
 export const createStudent = async (studentData) => {
-  return await createRecord('students', studentData);
+  return await createRecord('users', {
+    ...studentData,
+    role: 'student',
+    isActive: true
+  });
 };
 
 export const getStudent = async (studentId) => {
-  return await readRecord(`students/${studentId}`);
+  return await readRecord(`users/${studentId}`);
 };
 
 export const getAllStudents = async () => {
-  return await readAllRecords('students');
-};
-
-export const getStudentsByClass = async (classId) => {
-  return await queryRecords('students', 'classId', classId);
+  try {
+    const result = await readAllRecords('users');
+    if (result.success) {
+      const students = result.data.filter(user => user.role === 'student');
+      return { success: true, data: students };
+    }
+    return result;
+  } catch (error) {
+    console.error('Error getting students:', error);
+    return { success: false, error: error.message };
+  }
 };
 
 export const updateStudent = async (studentId, data) => {
-  return await updateRecord(`students/${studentId}`, data);
+  return await updateRecord(`users/${studentId}`, data);
 };
 
 export const deleteStudent = async (studentId) => {
-  return await deleteRecord(`students/${studentId}`);
+  return await deleteRecord(`users/${studentId}`);
 };
 
 // ============================================
@@ -192,19 +202,33 @@ export const deleteStudent = async (studentId) => {
 // ============================================
 
 export const createTeacher = async (teacherData) => {
-  return await createRecord('teachers', teacherData);
+  return await createRecord('users', {
+    ...teacherData,
+    role: 'teacher',
+    isActive: true
+  });
 };
 
 export const getTeacher = async (teacherId) => {
-  return await readRecord(`teachers/${teacherId}`);
+  return await readRecord(`users/${teacherId}`);
 };
 
 export const getAllTeachers = async () => {
-  return await readAllRecords('teachers');
+  try {
+    const result = await readAllRecords('users');
+    if (result.success) {
+      const teachers = result.data.filter(user => user.role === 'teacher');
+      return { success: true, data: teachers };
+    }
+    return result;
+  } catch (error) {
+    console.error('Error getting teachers:', error);
+    return { success: false, error: error.message };
+  }
 };
 
 export const updateTeacher = async (teacherId, data) => {
-  return await updateRecord(`teachers/${teacherId}`, data);
+  return await updateRecord(`users/${teacherId}`, data);
 };
 
 // ============================================
@@ -378,7 +402,27 @@ export const createUser = async (userId, userData) => {
 };
 
 export const getUser = async (userId) => {
-  return await readRecord(`users/${userId}`);
+  try {
+    // First try direct lookup (for users stored with uid as key)
+    const directResult = await readRecord(`users/${userId}`);
+    if (directResult.success) {
+      return directResult;
+    }
+    
+    // If not found, search by uid field (for users created with push keys)
+    const allUsersResult = await readAllRecords('users');
+    if (allUsersResult.success) {
+      const user = allUsersResult.data.find(u => u.uid === userId);
+      if (user) {
+        return { success: true, data: user };
+      }
+    }
+    
+    return { success: false, error: 'User not found' };
+  } catch (error) {
+    console.error('Error getting user:', error);
+    return { success: false, error: error.message };
+  }
 };
 
 export const updateUser = async (userId, data) => {
@@ -402,4 +446,129 @@ export const updateSystemSettings = async (settings) => {
     ...settings,
     updatedAt: Date.now()
   });
+};
+
+// ============================================
+// CLASS-STUDENT RELATIONSHIPS
+// ============================================
+
+/**
+ * Get all students in a class
+ */
+export const getStudentsByClass = async (classId) => {
+  try {
+    const snapshot = await get(ref(database, `class-students/${classId}`));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const array = Object.keys(data).map(key => ({
+        id: key,
+        ...data[key]
+      }));
+      return { success: true, data: array };
+    }
+    return { success: true, data: [] };
+  } catch (error) {
+    console.error('Error getting students by class:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// ============================================
+// CLASS-TEACHER RELATIONSHIPS
+// ============================================
+
+/**
+ * Get all teachers for a class
+ */
+export const getTeachersByClass = async (classId) => {
+  try {
+    const snapshot = await get(ref(database, `class-teachers/${classId}`));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const array = Object.keys(data).map(key => ({
+        id: key,
+        ...data[key]
+      }));
+      return { success: true, data: array };
+    }
+    return { success: true, data: [] };
+  } catch (error) {
+    console.error('Error getting teachers by class:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Get all classes for a teacher
+ */
+export const getClassesByTeacher = async (teacherId) => {
+  try {
+    const allClassTeachers = await readAllRecords('class-teachers');
+    if (allClassTeachers.success) {
+      const teacherClasses = [];
+      allClassTeachers.data.forEach(classData => {
+        if (classData[teacherId]) {
+          teacherClasses.push({
+            classId: classData.id,
+            ...classData[teacherId]
+          });
+        }
+      });
+      return { success: true, data: teacherClasses };
+    }
+    return { success: true, data: [] };
+  } catch (error) {
+    console.error('Error getting classes by teacher:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// ============================================
+// SUBJECT-TEACHER RELATIONSHIPS
+// ============================================
+
+/**
+ * Get all teachers for a subject
+ */
+export const getTeachersBySubject = async (subject) => {
+  try {
+    const snapshot = await get(ref(database, `subject-teachers/${subject}`));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const array = Object.keys(data).map(key => ({
+        id: key,
+        ...data[key]
+      }));
+      return { success: true, data: array };
+    }
+    return { success: true, data: [] };
+  } catch (error) {
+    console.error('Error getting teachers by subject:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Get all subjects for a teacher
+ */
+export const getSubjectsByTeacher = async (teacherId) => {
+  try {
+    const allSubjectTeachers = await readAllRecords('subject-teachers');
+    if (allSubjectTeachers.success) {
+      const teacherSubjects = [];
+      allSubjectTeachers.data.forEach(subjectData => {
+        if (subjectData[teacherId]) {
+          teacherSubjects.push({
+            subject: subjectData.id,
+            ...subjectData[teacherId]
+          });
+        }
+      });
+      return { success: true, data: teacherSubjects };
+    }
+    return { success: true, data: [] };
+  } catch (error) {
+    console.error('Error getting subjects by teacher:', error);
+    return { success: false, error: error.message };
+  }
 };

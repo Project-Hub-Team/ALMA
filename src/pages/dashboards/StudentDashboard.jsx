@@ -25,10 +25,10 @@ const StudentDashboard = () => {
 
     try {
       const [gradesResult, feesResult, notesResult, attendanceResult] = await Promise.all([
-        readAllRecords('grades'),
-        readAllRecords('fees'),
-        readAllRecords('lessonNotes'),
-        readAllRecords('attendance')
+        readAllRecords('grades').catch(() => ({ success: true, data: [] })),
+        readAllRecords('fees').catch(() => ({ success: true, data: [] })),
+        readAllRecords('lessonNotes').catch(() => ({ success: true, data: [] })),
+        readAllRecords('attendance').catch(() => ({ success: true, data: [] }))
       ]);
 
       // Calculate average grade

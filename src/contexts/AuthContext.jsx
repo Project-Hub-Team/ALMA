@@ -113,8 +113,21 @@ export const AuthProvider = ({ children }) => {
       return { success: true, user: userCredential.user };
     } catch (error) {
       console.error('Login error:', error);
-      setError(error.message);
-      return { success: false, error: error.message };
+      let errorMessage = error.message;
+      
+      // Provide user-friendly error messages
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email. Please contact your administrator.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed login attempts. Please try again later or reset your password.';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your internet connection.';
+      }
+      
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     }
   };
 

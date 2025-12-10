@@ -32,9 +32,9 @@ const SuperAdminDashboard = () => {
       const [studentsResult, teachersResult, adminsResult, vouchersResult, usersResult] = await Promise.all([
         getAllStudents(),
         getAllTeachers(),
-        readAllRecords('admins'),
-        readAllRecords('vouchers'),
-        readAllRecords('users')
+        readAllRecords('admins').catch(() => ({ success: true, data: [] })),
+        readAllRecords('vouchers').catch(() => ({ success: true, data: [] })),
+        readAllRecords('users').catch(() => ({ success: true, data: [] }))
       ]);
 
       // Count users by role (primary source)
