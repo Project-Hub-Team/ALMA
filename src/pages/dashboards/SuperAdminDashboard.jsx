@@ -128,7 +128,7 @@ const SuperAdminDashboard = () => {
             </button>
             
             <button className="p-4 border-2 border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors text-left">
-              <Users className="text-primary-600 mb-2" size={24} />
+              <MdPeople className="text-primary-600 mb-2" size={24} />
               <h4 className="font-semibold text-gray-800">Manage Admins</h4>
               <p className="text-sm text-gray-600 mt-1">Add or remove administrator accounts</p>
             </button>
