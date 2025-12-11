@@ -54,12 +54,16 @@ const Login = () => {
         }}
       >
         <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-12">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-            <MdSchool size={60} className="text-white" />
+          <div className="inline-flex items-center justify-center w-32 h-32 bg-white/20 backdrop-blur-sm rounded-2xl mb-6 p-4">
+            <img 
+              src="/ALMA logo.png" 
+              alt="ALMA Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <h2 className="text-4xl font-bold mb-4">Welcome Back!</h2>
           <p className="text-xl text-center max-w-md">
-            Empowering Education in Ghana - Managing Tomorrow's Leaders Today
+            Administrative & Learning Management Architecture - Empowering Education Excellence
           </p>
         </div>
       </div>
