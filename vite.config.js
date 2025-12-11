@@ -7,12 +7,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: ['ALMA logo.png', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Ghana School Management System',
-        short_name: 'School SMS',
-        description: 'Complete School Management System for Ghanaian Schools (Pre-School to JHS)',
-        theme_color: '#10b981',
+        name: 'ALMA - Administrative & Learning Management Architecture',
+        short_name: 'ALMA',
+        description: 'Administrative & Learning Management Architecture - Complete solution for Pre-School to JHS',
+        theme_color: '#006B3F',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
