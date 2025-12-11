@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { MdSchool, MdArrowBack, MdCloudUpload, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { CLASSES, GENDER, USER_ROLES } from '../../constants/ghanaEducation';
-import { getVoucher, markVoucherAsUsed } from '../../utils/database';
-import { uploadStudentPhoto, uploadStudentDocument } from '../../utils/storage';
-import { generateStudentId } from '../../utils/helpers';
-import { createStudent } from '../../utils/database';
+import { getVoucher, markVoucherAsUsed } from '../../Controller/vouchersController';
+import { uploadStudentPhoto, uploadStudentDocument } from '../../Controller/storage';
+import { generateStudentId } from '../../Controller/helpers';
+import { createStudent } from '../../Controller/studentsController';
 import toast from 'react-hot-toast';
 
 /**

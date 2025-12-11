@@ -14,7 +14,7 @@ import {
 } from 'firebase/auth';
 import { ref as dbRef, update } from 'firebase/database';
 import { auth, database } from '../config/firebase.config';
-import { getUser, createUser } from '../utils/database';
+import { getUser, createUser } from '../Controller/usersController';
 import { USER_ROLES } from '../constants/ghanaEducation';
 
 const AuthContext = createContext();

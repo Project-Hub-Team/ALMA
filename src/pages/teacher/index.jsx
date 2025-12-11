@@ -7,6 +7,7 @@ import { readAllRecords, createRecord, updateRecord } from '../../utils/database
 import { CLASSES, GRADING_SCALE } from '../../constants/ghanaEducation';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { AttendanceHistory as AttendanceHistoryComponent } from './AttendanceHistory';
 
 export const Attendance = () => {
   const { userProfile } = useAuth();
@@ -20,15 +21,18 @@ export const Attendance = () => {
     if (!selectedClass) return;
     setLoading(true);
     try {
-      const result = await readAllRecords('students');
+      const result = await readAllRecords('users');
       if (result.success) {
-        const classStudents = result.data.filter(s => s.class === selectedClass);
+        // Convert Firebase object to array and filter students
+        const allUsers = Object.values(result.data || {});
+        const className = CLASSES.find(cls => cls.id === selectedClass)?.name || selectedClass;
+        const classStudents = allUsers.filter(s => s.role === 'student' && s.class === className);
         setStudents(classStudents);
         
         // Initialize attendance state
         const attendanceState = {};
         classStudents.forEach(student => {
-          attendanceState[student.id] = 'present';
+          attendanceState[student.id] = ''; // Default to empty, not present
         });
         setAttendance(attendanceState);
       }
@@ -85,7 +89,7 @@ export const Attendance = () => {
                 className="input w-full"
               >
                 <option value="">Choose a class...</option>
-                {CLASSES.map(cls => (
+                {CLASSES.filter(cls => userProfile?.classes?.includes(cls.id)).map(cls => (
                   <option key={cls.id} value={cls.id}>{cls.name}</option>
                 ))}
               </select>
@@ -562,3 +566,6 @@ export const MyClasses = () => {
     </DashboardLayout>
   );
 };
+
+export { AttendanceHistoryComponent as AttendanceHistory };
+

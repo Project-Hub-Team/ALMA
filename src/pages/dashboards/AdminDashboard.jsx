@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import { MdPeople, MdSchool, MdAttachMoney, MdTrendingUp } from 'react-icons/md';
-import { getAllStudents, getAllTeachers, readAllRecords } from '../../utils/database';
+import { getAllStudents } from '../../Controller/studentsController';
+import { getAllTeachers } from '../../Controller/teachersController';
+import { readAllRecords } from '../../utils/database';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 const AdminDashboard = () => {

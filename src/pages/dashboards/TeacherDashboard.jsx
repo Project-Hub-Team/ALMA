@@ -3,6 +3,7 @@ import DashboardLayout from '../../components/DashboardLayout';
 import { MdMenuBook, MdPersonAdd, MdDescription, MdPeople } from 'react-icons/md';
 import { readAllRecords } from '../../utils/database';
 import { useAuth } from '../../contexts/AuthContext';
+import { CLASSES } from '../../constants/ghanaEducation';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 const TeacherDashboard = () => {
@@ -10,10 +11,16 @@ const TeacherDashboard = () => {
   const [stats, setStats] = useState({
     myClasses: 0,
     totalStudents: 0,
-    pendingGrades: 0,
-    attendanceRate: 0
+    totalGrades: 0,
+    attendanceSessions: 0
   });
   const [loading, setLoading] = useState(true);
+
+  // Helper function to get class name from ID
+  const getClassName = (classId) => {
+    const classObj = CLASSES.find(c => c.id === classId);
+    return classObj ? classObj.name : classId;
+  };
 
   useEffect(() => {
     loadDashboardData();
@@ -23,45 +30,41 @@ const TeacherDashboard = () => {
     if (!userProfile?.id) return;
 
     try {
-      const [classesResult, gradesResult, attendanceResult] = await Promise.all([
-        readAllRecords('classes').catch(() => ({ success: true, data: [] })),
+      const [studentsResult, gradesResult, attendanceResult] = await Promise.all([
+        readAllRecords('users').catch(() => ({ success: true, data: [] })),
         readAllRecords('grades').catch(() => ({ success: true, data: [] })),
         readAllRecords('attendance').catch(() => ({ success: true, data: [] }))
       ]);
 
-      // Filter classes assigned to this teacher
-      const myClasses = classesResult.data?.filter(
-        c => c.teacherId === userProfile.id || c.formTeacher === userProfile.id
-      ) || [];
+      // Get teacher's assigned classes
+      const myClasses = userProfile.classes || [];
+      const myClassIds = myClasses;
 
       // Count total students in teacher's classes
+      const allStudents = Object.values(studentsResult.data || {}).filter(s => s.role === 'student') || [];
       let totalStudents = 0;
-      myClasses.forEach(cls => {
-        totalStudents += cls.students?.length || 0;
+      myClassIds.forEach(classId => {
+        const className = getClassName(classId);
+        const studentsInClass = allStudents.filter(s => s.class === className);
+        totalStudents += studentsInClass.length;
       });
 
-      // Count pending grades (grades not yet submitted)
-      const pendingGrades = gradesResult.data?.filter(
-        g => g.teacherId === userProfile.id && !g.submitted
+      // Count total grades entered by teacher
+      const totalGrades = Object.values(gradesResult.data || {}).filter(
+        g => g.teacherId === userProfile.id
       ).length || 0;
 
-      // Calculate attendance rate
-      const teacherAttendance = attendanceResult.data?.filter(
+      // Calculate attendance sessions count
+      const attendanceSessions = Object.values(attendanceResult.data || {}).filter(
         a => a.teacherId === userProfile.id
-      ) || [];
-      
-      let attendanceRate = 0;
-      if (teacherAttendance.length > 0) {
-        const totalRecords = teacherAttendance.length;
-        const presentRecords = teacherAttendance.filter(a => a.status === 'present').length;
-        attendanceRate = Math.round((presentRecords / totalRecords) * 100);
-      }
+      ).length || 0;
 
+      // Update the stats state
       setStats({
         myClasses: myClasses.length,
         totalStudents,
-        pendingGrades,
-        attendanceRate
+        totalGrades,
+        attendanceSessions
       });
     } catch (error) {
       console.error('Error loading dashboard:', error);
@@ -69,8 +72,8 @@ const TeacherDashboard = () => {
       setStats({
         myClasses: 0,
         totalStudents: 0,
-        pendingGrades: 0,
-        attendanceRate: 0
+        totalGrades: 0,
+        attendanceSessions: 0
       });
     } finally {
       setLoading(false);
@@ -133,8 +136,8 @@ const TeacherDashboard = () => {
           <div className="card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Pending Grades</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.pendingGrades}</p>
+                <p className="text-sm text-gray-600 mb-1">Total Grades</p>
+                <p className="text-3xl font-bold text-gray-800">{stats.totalGrades}</p>
               </div>
               <div className="bg-green-500 w-12 h-12 rounded-lg flex items-center justify-center">
                 <MdDescription className="text-white" size={24} />
@@ -145,8 +148,8 @@ const TeacherDashboard = () => {
           <div className="card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Attendance Rate</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.attendanceRate}%</p>
+                <p className="text-sm text-gray-600 mb-1">Attendance Sessions</p>
+                <p className="text-3xl font-bold text-gray-800">{stats.attendanceSessions}</p>
               </div>
               <div className="bg-green-500 w-12 h-12 rounded-lg flex items-center justify-center">
                 <MdPersonAdd className="text-white" size={24} />

@@ -5,7 +5,7 @@
 
 import { ref, uploadBytes, getDownloadURL, deleteObject, listAll } from 'firebase/storage';
 import { storage } from '../config/firebase.config';
-import { createRecord, updateRecord } from './database';
+import { createRecord, updateRecord } from '../utils/database';
 
 /**
  * Convert file to base64

@@ -19,17 +19,18 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LoadingSpinner from './components/LoadingSpinner';
 
 // Admin Pages
-import Students from './pages/admin/Students';
-import Teachers from './pages/admin/Teachers';
-import Classes from './pages/admin/Classes';
-import Fees from './pages/admin/Fees';
+import { Students } from './pages/admin/Students';
+import { Teachers } from './pages/admin/Teachers';
+import { Classes } from './pages/admin/Classes';
+import { Fees } from './pages/admin/Fees';
 import Reports from './pages/admin/Reports';
 
 // Teacher Pages
-import Attendance from './pages/teacher/Attendance';
-import GradeEntry from './pages/teacher/GradeEntry';
-import LessonNotes from './pages/teacher/LessonNotes';
-import MyClasses from './pages/teacher/MyClasses';
+import { Attendance } from './pages/teacher/Attendance';
+import { GradeEntry } from './pages/teacher/GradeEntry';
+import { LessonNotes } from './pages/teacher/LessonNotes';
+import { MyClasses } from './pages/teacher/MyClasses';
+import { AttendanceHistory } from './pages/teacher/index';
 
 // Student Pages
 import MyResults from './pages/student/MyResults';
@@ -182,6 +183,14 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={[USER_ROLES.TEACHER]}>
             <MyClasses />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/teacher/attendance-history"
+        element={
+          <ProtectedRoute allowedRoles={[USER_ROLES.TEACHER]}>
+            <AttendanceHistory />
           </ProtectedRoute>
         }
       />

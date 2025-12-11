@@ -3,7 +3,9 @@ import DashboardLayout from '../../components/DashboardLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { MdPeople, MdSchool, MdMenuBook, MdAttachMoney, MdTrendingUp, MdPersonAdd, MdSettings, MdSecurity, MdConfirmationNumber } from 'react-icons/md';
-import { getAllStudents, getAllTeachers, readAllRecords } from '../../utils/database';
+import { getAllStudents } from '../../Controller/studentsController';
+import { getAllTeachers } from '../../Controller/teachersController';
+import { readAllRecords } from '../../utils/database';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 

@@ -73,6 +73,7 @@ const DashboardLayout = ({ children, title }) => {
         { name: 'Dashboard', path: '/dashboard', icon: MdDashboard },
         { name: 'My Classes', path: '/teacher/my-classes', icon: MdMenuBook },
         { name: 'Attendance', path: '/teacher/attendance', icon: MdPersonAdd },
+        { name: 'Attendance History', path: '/teacher/attendance-history', icon: MdBarChart },
         { name: 'Grade Entry', path: '/teacher/grades', icon: MdDescription },
         { name: 'Lesson Notes', path: '/teacher/lesson-notes', icon: MdMenuBook }
       ];
