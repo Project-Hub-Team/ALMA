@@ -70,10 +70,10 @@ const Login = () => {
 
       {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white min-h-screen">
-        <div className="max-w-md w-full">
-          {/* Logo & Title - Mobile Only */}
-          <div className="text-center mb-6 sm:mb-8 lg:hidden">
-            <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 mb-4 bg-white rounded-full shadow-lg p-4">
+        <div className="max-w-md w-full space-y-6 sm:space-y-8">
+          {/* Logo - Mobile Only */}
+          <div className="flex justify-center lg:hidden">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-full shadow-xl p-5 flex items-center justify-center">
               <img 
                 src="/ALMA logo.png" 
                 alt="ALMA Logo" 
@@ -83,7 +83,7 @@ const Login = () => {
           </div>
 
           {/* Desktop Title */}
-          <div className="hidden lg:block text-center mb-8">
+          <div className="hidden lg:block text-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               Sign In
             </h1>
@@ -91,14 +91,14 @@ const Login = () => {
           </div>
 
           {/* Login Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 border border-gray-100">
             {/* Mobile: Sign In Title */}
-            <div className="lg:hidden text-center mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Sign In</h2>
-              <p className="text-sm text-gray-600 mt-1">Enter your credentials to continue</p>
+            <div className="lg:hidden text-center mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Sign In</h2>
+              <p className="text-sm sm:text-base text-gray-600 mt-2">Enter your credentials to continue</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
               {/* Email */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
