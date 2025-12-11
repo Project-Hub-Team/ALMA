@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { MdGetApp, MdClose } from 'react-icons/md';
 
+// Store the prompt globally to capture it before component mounts
+let globalDeferredPrompt = null;
+
+// Capture the event as early as possible
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('beforeinstallprompt event captured globally');
+  e.preventDefault();
+  globalDeferredPrompt = e;
+});
+
 const InstallButton = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
@@ -25,12 +35,20 @@ const InstallButton = () => {
       // Don't return - allow it to show again on page refresh
     }
 
+    // Check if the event was already captured before component mounted
+    if (globalDeferredPrompt) {
+      console.log('Using globally captured install prompt');
+      setDeferredPrompt(globalDeferredPrompt);
+      setShowInstallButton(true);
+    }
+
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e) => {
-      console.log('beforeinstallprompt event fired');
+      console.log('beforeinstallprompt event fired in component');
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Store the event so it can be triggered later
+      globalDeferredPrompt = e;
       setDeferredPrompt(e);
       // Show the install button
       setShowInstallButton(true);
@@ -43,6 +61,7 @@ const InstallButton = () => {
       console.log('App installed successfully');
       setShowInstallButton(false);
       setDeferredPrompt(null);
+      globalDeferredPrompt = null;
       sessionStorage.removeItem('installPromptDismissed');
     };
 
@@ -72,6 +91,7 @@ const InstallButton = () => {
 
     // Clear the deferred prompt
     setDeferredPrompt(null);
+    globalDeferredPrompt = null;
   };
 
   const handleDismiss = () => {
