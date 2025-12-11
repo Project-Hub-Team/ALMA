@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['ALMA logo.png', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: ['ALMA logo.png', 'robots.txt', 'apple-touch-icon.png', '_redirects'],
       manifest: {
         name: 'ALMA - Administrative & Learning Management Architecture',
         short_name: 'ALMA',
@@ -62,5 +62,10 @@ export default defineConfig({
     alias: {
       '@': '/src'
     }
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    copyPublicDir: true
   }
 });
