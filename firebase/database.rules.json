@@ -87,6 +87,11 @@
       ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'super_admin' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
     },
     
+    "settings": {
+      ".read": "true",
+      ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() === 'super_admin' || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+    },
+    
     "notifications": {
       "$userId": {
         ".read": "auth != null && $userId === auth.uid",
