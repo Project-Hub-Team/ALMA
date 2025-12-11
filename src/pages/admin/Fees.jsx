@@ -44,7 +44,10 @@ export const Fees = () => {
     try {
       const result = await getAllStudents();
       if (result.success) {
-        setStudents(result.data || []);
+        // Convert object to array if needed
+        const studentsData = result.data || [];
+        const studentsArray = Array.isArray(studentsData) ? studentsData : Object.values(studentsData);
+        setStudents(studentsArray);
       }
     } catch (error) {
       console.error('Failed to load students');
@@ -55,7 +58,10 @@ export const Fees = () => {
     try {
       const result = await readAllRecords('fees');
       if (result.success) {
-        setFees(result.data || []);
+        // Convert object to array if needed
+        const feesData = result.data || [];
+        const feesArray = Array.isArray(feesData) ? feesData : Object.values(feesData);
+        setFees(feesArray);
       }
     } catch (error) {
       toast.error('Failed to load fees');
